@@ -18,8 +18,8 @@ Played with the arrow keys on a keyboard.
 
 Two differences between the versions, the JS one has nice borders around the blocks and you need to press an arrow key to get it moving, where the Indigo version just starts!
 
-Indigo version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/index.html)
-Original JS version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/snake-js.html)
+- Indigo version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/index.html)
+- Original JS version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/snake-js.html)
 
 ## Details
 
