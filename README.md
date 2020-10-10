@@ -12,6 +12,17 @@ The JS below is not supposed to be good code as Chris points out in his video, i
 
 Anyway, ignoring the insane time factor, I found the terseness of it really interesting and wondered what it would look like if it was ported to [Indigo](https://indigoengine.io/), the result is this repo.
 
+## Play the two versions now
+
+Played with the arrow keys on a keyboard.
+
+Two differences between the versions, the JS one has nice borders around the blocks and you need to press an arrow key to get it moving, where the Indigo version just starts!
+
+Indigo version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/index.html)
+Original JS version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/snake-js.html)
+
+## Details
+
 | Version | Lines of code  | File size |
 | ------------- | ------------- | ------------- |
 | Original JS  | 69 | 1 Kb |
