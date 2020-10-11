@@ -20,7 +20,7 @@ object Snake extends IndigoSandbox[Unit, SnakeModel] {
     Startup.Success(())
 
   def initialModel(startupData: Unit): SnakeModel =
-    SnakeModel(Point(10, 10), 20, Point(15, 15), Point(0, -1), Nil, 5)
+    SnakeModel(Point(10, 10), 20, Point(15, 15), Point.zero, Nil, 5)
 
   def updateModel(context: FrameContext[Unit], model: SnakeModel): GlobalEvent => Outcome[SnakeModel] = {
     case KeyboardEvent.KeyDown(Key.LEFT_ARROW) =>
@@ -73,8 +73,8 @@ object Snake extends IndigoSandbox[Unit, SnakeModel] {
     Graphic(Rectangle(20, 0, 20, 20), 1, Material.Textured(AssetName("squares")))
 
   def present(context: FrameContext[Unit], model: SnakeModel): SceneUpdateFragment =
-    SceneUpdateFragment(apple.moveTo(model.apple * model.gridSize))
-      .addGameLayerNodes(model.trail.map(coords => tailSegment.moveTo(coords * model.gridSize)))
+    SceneUpdateFragment(model.trail.map(coords => tailSegment.moveTo(coords * model.gridSize)))
+      .addGameLayerNodes(apple.moveTo(model.apple * model.gridSize))
 
 }
 
