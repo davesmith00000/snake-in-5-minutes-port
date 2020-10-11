@@ -16,10 +16,14 @@ Anyway, ignoring the insane time factor, I found the terseness of it really inte
 
 Played with the arrow keys on a keyboard.
 
-Two differences between the versions, the JS one has nice borders around the blocks and you need to press an arrow key to get it moving, where the Indigo version just starts!
-
 - Indigo version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/index.html)
 - Original JS version - [Play](https://davesmith00000.github.io/snake-in-5-minutes-port/snake-js.html)
+
+### Differences
+
+Two immediately obvious differences between the versions, the JS one has nice borders around the blocks and you need to press an arrow key to get it moving, where the Indigo version just starts!
+
+Another difference you might notice is that the Indigo version appears to have input lag, or conversely, the JS version feels more responsive ...and that's because it is. In the JS version, the velocity values are updated outside of the game loop instantly on keyboard event. You can do that sort of this with a mutable model, but do watch out for [accidental concurrency](https://www.youtube.com/watch?v=DfLvDFxcAIA). Indigo on the other hand is only processing those events at the next frame update every 15th of a second - 66 milliseconds - a huge amount of time between pressing the key and responding! Speculatively, the solution would probably be to increase the games frame rate to 60 FPS, but throttle snake model updates to happen every 15 FPS.
 
 ## Details
 
