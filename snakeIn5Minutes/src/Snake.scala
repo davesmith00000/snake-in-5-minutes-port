@@ -2,27 +2,21 @@ import indigo._
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("IndigoGame")
-object Snake extends IndigoSandbox[Unit, SnakeModel] {
+object Snake extends IndigoSandbox[Unit, SnakeModel]:
 
-  val config: GameConfig =
-    GameConfig.default.withViewport(400, 400).withFrameRate(15)
+  val config: GameConfig         = GameConfig.default.withViewport(400, 400).withFrameRate(15)
+  val assets: Set[AssetType]     = Set()
+  val animations: Set[Animation] = Set()
+  val fonts: Set[FontInfo]       = Set()
+  val shaders: Set[Shader]       = Set()
 
-  val animations: Set[Animation] =
-    Set()
+  def setup(assetCollection: AssetCollection, dice: Dice): Outcome[Startup[Unit]] =
+    Outcome(Startup.Success(()))
 
-  val assets: Set[AssetType] =
-    Set(AssetType.Image(AssetName("squares"), AssetPath("assets/squares.png")))
+  def initialModel(startupData: Unit): Outcome[SnakeModel] =
+    Outcome(SnakeModel(Point(10, 10), 20, Point(15, 15), Point.zero, Nil, 5))
 
-  val fonts: Set[FontInfo] =
-    Set()
-
-  def setup(assetCollection: AssetCollection, dice: Dice): Startup[Unit] =
-    Startup.Success(())
-
-  def initialModel(startupData: Unit): SnakeModel =
-    SnakeModel(Point(10, 10), 20, Point(15, 15), Point.zero, Nil, 5)
-
-  def updateModel(context: FrameContext[Unit], model: SnakeModel): GlobalEvent => Outcome[SnakeModel] = {
+  def updateModel(context: FrameContext[Unit], model: SnakeModel): GlobalEvent => Outcome[SnakeModel] =
     case KeyboardEvent.KeyDown(Key.LEFT_ARROW) =>
       Outcome(model.copy(velocity = Point(-1, 0)))
 
@@ -46,37 +40,34 @@ object Snake extends IndigoSandbox[Unit, SnakeModel] {
         )(model.position + model.velocity)
 
       val nextApple: Point =
-        if (model.apple == model.position)
+        if model.apple == model.position then
           Point(context.dice.roll(model.gridSize) - 1, context.dice.roll(model.gridSize) - 1)
         else model.apple
 
       val nextTail =
-        if (model.trail.contains((model.position))) 5
-        else if (model.apple == model.position) model.tail + 1
+        if model.trail.contains((model.position)) then 5
+        else if model.apple == model.position then model.tail + 1
         else model.tail
 
       val nextTrail =
         model.position :: model.trail.dropRight(Math.max(0, model.trail.length - model.tail))
 
-      Outcome(
-        model.copy(position = nextPosition, apple = nextApple, tail = nextTail, trail = nextTrail)
-      )
+      Outcome(model.copy(position = nextPosition, apple = nextApple, tail = nextTail, trail = nextTrail))
 
     case _ =>
       Outcome(model)
-  }
 
-  val apple =
-    Graphic(Rectangle(0, 0, 20, 20), 1, Material.Textured(AssetName("squares")))
+  val apple       = Shape.Box(Rectangle(1, 1, 18, 18), Fill.Color(RGBA.Red))
+  val tailSegment = Shape.Box(Rectangle(1, 1, 18, 18), Fill.Color(RGBA.fromHexString("00ff1b")))
 
-  val tailSegment =
-    Graphic(Rectangle(20, 0, 20, 20), 1, Material.Textured(AssetName("squares")))
-
-  def present(context: FrameContext[Unit], model: SnakeModel): SceneUpdateFragment =
-    SceneUpdateFragment(model.trail.map(coords => tailSegment.moveTo(coords * model.gridSize)))
-      .addGameLayerNodes(apple.moveTo(model.apple * model.gridSize))
-
-}
+  def present(context: FrameContext[Unit], model: SnakeModel): Outcome[SceneUpdateFragment] =
+    Outcome(
+      SceneUpdateFragment(
+        apple.moveTo(model.apple * model.gridSize) :: model.trail.map(coords =>
+          tailSegment.moveTo(coords * model.gridSize)
+        )
+      )
+    )
 
 final case class SnakeModel(
     position: Point,
