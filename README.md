@@ -32,7 +32,7 @@ Indigo on the other hand is only processing those events at the next frame updat
 | Version | Lines of code  | File size |
 | ------------- | ------------- | ------------- |
 | Original JS  | 69 | 1 Kb |
-| Indigo  | 79 | 584 Kb (LOL!) |
+| Indigo  | 59 | 584 Kb (LOL!) |
 
 Regarding the file size, in this case the comparison is silly. The JS version consists of code that does nothing other than run this Snake game, whereas the Scala / Indigo based version has an entire game engine bundled into it. A more interesting comparison is with the [old version of snake running on Indigo's website](https://indigoengine.io/snake.html), which clocks in at 675 KB. It _is_ 91 KB larger but is also a much more complete, considered, and tested version of the same game with ***29 Scala files and 1511 lines of code*** (according to [CLOC](http://cloc.sourceforge.net/)) - that's 17 times more code not including tests.
 
