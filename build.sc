@@ -4,10 +4,10 @@ import mill.scalalib._
 import mill.scalajslib._
 import mill.scalajslib.api._
 
-import $ivy.`io.indigoengine::mill-indigo:0.9.2`, millindigo._
+import $ivy.`io.indigoengine::mill-indigo:0.10.0`, millindigo._
 
 object snakeIn5Minutes extends ScalaJSModule with MillIndigo {
-  def scalaVersion   = "3.0.2"
+  def scalaVersion   = "3.1.0"
   def scalaJSVersion = "1.7.1"
 
   val gameAssetsDirectory: os.Path = os.pwd / "assets"
@@ -43,7 +43,7 @@ object snakeIn5Minutes extends ScalaJSModule with MillIndigo {
       }
     }
 
-  val indigoVersion = "0.9.2"
+  val indigoVersion = "0.10.0"
 
   def ivyDeps =
     Agg(
