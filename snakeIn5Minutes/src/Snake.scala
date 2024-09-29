@@ -1,8 +1,10 @@
-import indigo._, scala.scalajs.js.annotation.JSExportTopLevel
+import indigo.*
+import indigo.syntax.*
+import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("IndigoGame") object Snake extends IndigoSandbox[Unit, SnakeModel]:
 
-  val config: GameConfig         = GameConfig.default.withViewport(400, 400).withFrameRate(15)
+  val config: GameConfig         = GameConfig.default.withViewport(400, 400).withFrameRateLimit(15)
   val assets: Set[AssetType]     = Set()
   val animations: Set[Animation] = Set()
   val fonts: Set[FontInfo]       = Set()
@@ -52,7 +54,7 @@ import indigo._, scala.scalajs.js.annotation.JSExportTopLevel
       SceneUpdateFragment(
         Shape.Box(boxSize, Fill.Color(RGBA.Red)).moveTo(model.apple * model.gridSize) :: model.trail.map(coords =>
           Shape.Box(boxSize, Fill.Color(RGBA.fromHexString("00ff1b"))).moveTo(coords * model.gridSize)
-        )
+        ).toBatch
       )
     )
 
