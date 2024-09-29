@@ -15,3 +15,6 @@ src_managed
 *.iml
 .vscode
 .dotty-ide-disabled
+.direnv
+.envrc
+.bsp

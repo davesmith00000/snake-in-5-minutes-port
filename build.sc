@@ -4,23 +4,17 @@ import mill.scalalib._
 import mill.scalajslib._
 import mill.scalajslib.api._
 
-import $ivy.`io.indigoengine::mill-indigo:0.10.0`, millindigo._
+import $ivy.`io.indigoengine::mill-indigo:0.17.0`, millindigo._
 
 object snakeIn5Minutes extends ScalaJSModule with MillIndigo {
-  def scalaVersion   = "3.1.0"
-  def scalaJSVersion = "1.7.1"
-
-  val gameAssetsDirectory: os.Path = os.pwd / "assets"
-  val showCursor: Boolean          = true
-  val title: String                = "Snake in 5 minutes - Made with Indigo"
-  val windowStartWidth: Int        = 400
-  val windowStartHeight: Int       = 400
+  def scalaVersion   = "3.5.0"
+  def scalaJSVersion = "1.17.0"
 
   def buildGame() =
     T.command {
       T {
         compile()
-        fastOpt()
+        fastLinkJS()
         indigoBuild()()
       }
     }
@@ -29,7 +23,7 @@ object snakeIn5Minutes extends ScalaJSModule with MillIndigo {
     T.command {
       T {
         compile()
-        fullOpt()
+        fullLinkJS()
         indigoBuildFull()()
       }
     }
@@ -38,50 +32,39 @@ object snakeIn5Minutes extends ScalaJSModule with MillIndigo {
     T.command {
       T {
         compile()
-        fastOpt()
+        fastLinkJS()
         indigoRun()()
       }
     }
 
-  val indigoVersion = "0.10.0"
+  def runGameFull() =
+    T.command {
+      T {
+        compile()
+        fullLinkJS()
+        indigoRunFull()()
+      }
+    }
+
+  val indigoVersion = "0.17.0"
+
+  val indigoOptions: IndigoOptions =
+    IndigoOptions.defaults
+      .withTitle("Snake in 5 minutes - Made with Indigo")
+      .withWindowSize(400, 400)
+      .withBackgroundColor("black")
+      .withAssetDirectory(os.RelPath.rel / "assets")
+      .excludeAssets {
+        case p if p.endsWith(os.RelPath.rel / ".gitkeep") => true
+        case _                                            => false
+      }
+
+  val indigoGenerators: IndigoGenerators =
+    IndigoGenerators.None
 
   def ivyDeps =
     Agg(
       ivy"io.indigoengine::indigo::$indigoVersion"
-    )
-
-  def scalacOptions = super.scalacOptions() ++ ScalacOptions.compile
-
-}
-
-object ScalacOptions {
-
-  lazy val compile: Seq[String] =
-    Seq(
-      "-deprecation", // Emit warning and location for usages of deprecated APIs.
-      "-encoding",
-      "utf-8",                         // Specify character encoding used by source files.
-      "-feature",                      // Emit warning and location for usages of features that should be imported explicitly.
-      "-language:existentials",        // Existential types (besides wildcard types) can be written and inferred
-      "-language:experimental.macros", // Allow macro definition (besides implementation and application)
-      "-language:higherKinds",         // Allow higher-kinded types
-      "-language:implicitConversions", // Allow definition of implicit functions called views
-      "-unchecked",                    // Enable additional warnings where generated code depends on assumptions.
-      "-Xfatal-warnings",              // Fail the compilation if there are any warnings.
-      "-language:strictEquality"       // Scala 3 - Multiversal Equality
-    )
-
-  lazy val test: Seq[String] =
-    Seq(
-      "-deprecation", // Emit warning and location for usages of deprecated APIs.
-      "-encoding",
-      "utf-8",                         // Specify character encoding used by source files.
-      "-feature",                      // Emit warning and location for usages of features that should be imported explicitly.
-      "-language:existentials",        // Existential types (besides wildcard types) can be written and inferred
-      "-language:experimental.macros", // Allow macro definition (besides implementation and application)
-      "-language:higherKinds",         // Allow higher-kinded types
-      "-language:implicitConversions", // Allow definition of implicit functions called views
-      "-unchecked"                     // Enable additional warnings where generated code depends on assumptions.
     )
 
 }
