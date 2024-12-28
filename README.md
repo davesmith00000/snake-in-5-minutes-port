@@ -51,7 +51,7 @@ If you clone the repo you can run it yourself. Requirements are: JDK, Mill, and 
 Run the following command from your terminal in the repo root:
 
 ```bash
-mill snakeIn5Minutes.runGame
+./mill snakeIn5Minutes.runGame
 ```
 
 ## Original HTML/JS source code
