@@ -4,11 +4,11 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("IndigoGame") object Snake extends IndigoSandbox[Unit, SnakeModel]:
 
-  val config: GameConfig         = GameConfig.default.withViewport(400, 400).withFrameRateLimit(15)
-  val assets: Set[AssetType]     = Set()
-  val animations: Set[Animation] = Set()
-  val fonts: Set[FontInfo]       = Set()
-  val shaders: Set[Shader]       = Set()
+  val config: GameConfig          = GameConfig.default.withViewport(400, 400).withFrameRateLimit(15)
+  val assets: Set[AssetType]      = Set()
+  val animations: Set[Animation]  = Set()
+  val fonts: Set[FontInfo]        = Set()
+  val shaders: Set[ShaderProgram] = Set()
 
   def setup(assetCollection: AssetCollection, dice: Dice): Outcome[Startup[Unit]] =
     Outcome(Startup.Success(()))
@@ -16,17 +16,17 @@ import scala.scalajs.js.annotation.JSExportTopLevel
   def initialModel(startupData: Unit): Outcome[SnakeModel] =
     Outcome(SnakeModel(Point(10, 10), 20, Point(15, 15), Point.zero, Nil, 5))
 
-  def updateModel(context: FrameContext[Unit], model: SnakeModel): GlobalEvent => Outcome[SnakeModel] =
-    case KeyboardEvent.KeyDown(Key.LEFT_ARROW) =>
+  def updateModel(context: Context[Unit], model: SnakeModel): GlobalEvent => Outcome[SnakeModel] =
+    case KeyboardEvent.KeyDown(Key.ARROW_LEFT) =>
       Outcome(model.copy(direction = Point(-1, 0)))
 
-    case KeyboardEvent.KeyDown(Key.RIGHT_ARROW) =>
+    case KeyboardEvent.KeyDown(Key.ARROW_RIGHT) =>
       Outcome(model.copy(direction = Point(1, 0)))
 
-    case KeyboardEvent.KeyDown(Key.UP_ARROW) =>
+    case KeyboardEvent.KeyDown(Key.ARROW_UP) =>
       Outcome(model.copy(direction = Point(0, -1)))
 
-    case KeyboardEvent.KeyDown(Key.DOWN_ARROW) =>
+    case KeyboardEvent.KeyDown(Key.ARROW_DOWN) =>
       Outcome(model.copy(direction = Point(0, 1)))
 
     case FrameTick =>
@@ -36,11 +36,11 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
       val nextApple: Point =
         if model.apple == model.head then
-          Point(context.dice.roll(model.gridSize) - 1, context.dice.roll(model.gridSize) - 1)
+          Point(context.frame.dice.roll(model.gridSize) - 1, context.frame.dice.roll(model.gridSize) - 1)
         else model.apple
 
       val nextTail =
-        if (model.trail.contains((model.head))) 5 else if (model.apple == model.head) model.tail + 1 else model.tail
+        if (model.trail.contains(model.head)) 5 else if (model.apple == model.head) model.tail + 1 else model.tail
 
       val nextTrail = model.head :: model.trail.dropRight(Math.max(0, model.trail.length - model.tail))
 
@@ -48,13 +48,13 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
     case _ => Outcome(model)
 
-  def present(context: FrameContext[Unit], model: SnakeModel): Outcome[SceneUpdateFragment] =
+  def present(context: Context[Unit], model: SnakeModel): Outcome[SceneUpdateFragment] =
     val boxSize = Rectangle(1, 1, 18, 18)
     Outcome(
       SceneUpdateFragment(
-        Shape.Box(boxSize, Fill.Color(RGBA.Red)).moveTo(model.apple * model.gridSize) :: model.trail.map(coords =>
-          Shape.Box(boxSize, Fill.Color(RGBA.fromHexString("00ff1b"))).moveTo(coords * model.gridSize)
-        ).toBatch
+        Shape.Box(boxSize, Fill.Color(RGBA.Red)).moveTo(model.apple * model.gridSize) :: model.trail
+          .map(coords => Shape.Box(boxSize, Fill.Color(RGBA.fromHexString("00ff1b"))).moveTo(coords * model.gridSize))
+          .toBatch
       )
     )
 
