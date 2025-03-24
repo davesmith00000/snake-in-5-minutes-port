@@ -4,13 +4,13 @@ import mill.scalalib._
 import mill.scalajslib._
 import mill.scalajslib.api._
 
-import $ivy.`io.indigoengine::mill-indigo:0.18.0`, millindigo._
+import $ivy.`io.indigoengine::mill-indigo:0.19.0`, millindigo._
 
 object snakeIn5Minutes extends ScalaJSModule with MillIndigo {
   def scalaVersion   = "3.6.2"
-  def scalaJSVersion = "1.18.1"
+  def scalaJSVersion = "1.18.2"
 
-  val indigoVersion = "0.18.0"
+  val indigoVersion = "0.19.0"
 
   val indigoOptions: IndigoOptions =
     IndigoOptions.defaults
